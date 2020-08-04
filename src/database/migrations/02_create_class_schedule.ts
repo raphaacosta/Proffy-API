@@ -9,6 +9,7 @@ export async function up(knex: Knex) {
     table.integer('to').notNullable();
     
     table.integer('class_id')
+      .unsigned()
       .notNullable()
       .references('id')
       .inTable('classes')

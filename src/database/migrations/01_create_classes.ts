@@ -7,6 +7,7 @@ export async function up(knex: Knex) {
     table.decimal('cost').notNullable();
     
     table.integer('user_id')
+      .unsigned()
       .notNullable()
       .references('id')
       .inTable('users')
