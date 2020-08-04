@@ -40,7 +40,7 @@
 
 # 🚀 Running
 
-  - Clone this repository: `$ git clone https://github.com/raphaacosta/Here-Your-Quotes-Api.git`.
+  - Clone this repository: `$ git clone https://github.com/raphaacosta/Proffy-API.git`.
   - To install all dependencies, run: `$ yarn install` or `$ npm install`
   - Initiate the database run: `$ yarn knex:migrate`
   - Now, run: `$ yarn dev` or `$ npm dev` to developer version.
