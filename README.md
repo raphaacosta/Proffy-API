@@ -13,6 +13,9 @@
     <a href="https://github.com/raphaacosta/Proffy-Web">
       <img src="https://img.shields.io/badge/Go%20to-Web-blueviolet" alt="WebProffy"/>
     </a>
+    <h2>
+      Made with 💜
+    </h2>
   </div>
 </div>
 
