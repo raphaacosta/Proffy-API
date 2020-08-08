@@ -4,11 +4,11 @@
   "main": "server.ts",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",  
     "knex:migrate": "knex --knexfile dist/knexfile.js migrate:latest",
     "knex:rollback": "knex --knexfile dist/knexfile.js migrate:rollback",
-    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored"
+    "build": "tsc"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
