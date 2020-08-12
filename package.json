@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/src/server.js",
-    "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",  
-    "knex:migrate": "knex --knexfile dist/knexfile.js migrate:latest",
-    "knex:rollback": "knex --knexfile dist/knexfile.js migrate:rollback",
+    "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
+    "knex:rollback": "knex --knexfile knexfile.ts migrate:rollback",
     "build": "tsc"
   },
   "devDependencies": {
@@ -16,19 +16,25 @@
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-typescript": "^7.10.4",
+    "@types/bcrypt": "^3.0.0",
     "@types/cors": "^2.8.7",
     "@types/express": "^4.17.7",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/multer": "^1.4.3",
+    "@types/nodemailer": "^6.4.0",
     "babel-plugin-module-resolver": "^4.0.0",
+    "nodemailer": "^6.4.11",
     "ts-node-dev": "^1.0.0-pre.56",
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.2",
-    "mysql": "^2.18.1",
-    "pg": "^8.3.0",
-    "sqlite3": "^5.0.0"
+    "multer": "^1.4.2",
+    "pg": "^8.3.0"
   }
 }
