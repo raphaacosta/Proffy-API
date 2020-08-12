@@ -55,7 +55,8 @@ export default class ClassesController {
       })
       .where('classes.subject', '=', subject)
       .join('users', 'classes.user_id', '=', 'users.id')
-      .select(['classes.*', 'users.*']);
+      .join('class_schedule', 'classes.id', '=', 'class_schedule.class_id')
+      .select(['classes.*', 'users.*', 'class_schedule.*']);
 
     return response.json(classes);
   }
