@@ -140,9 +140,6 @@ export default class ClassesController {
     const token = request.headers.authorization;
     const { userId } = request.params;
     const { 
-      first_name, 
-      last_name, 
-      email, 
       avatar, 
       whatsapp, 
       bio, 
@@ -186,9 +183,6 @@ export default class ClassesController {
         const insertedUsersIds = await trx('users')
           .where('id', userId)
           .update({
-            first_name, 
-            last_name, 
-            email,
             avatar,
             whatsapp,
             bio
@@ -196,25 +190,13 @@ export default class ClassesController {
         
         const user_id = insertedUsersIds[0];
       
-        const insertedClassesIds = await trx('classes')
+        await trx('classes')
           .where('user_id', user_id)
           .update({
-            subject,
             cost,
           }).returning('id');
         
-        const class_id = insertedClassesIds[0];
-
-          const oldClassSchedule = await trx('class_schedule')
-            .whereExists(function() {
-              this.select('class_schedule.*')
-                .from('class_schedule')
-                .whereRaw('class_schedule.class_id = ??', [class_id])
-                .select('id');
-            })
-
-        console.log(oldClassSchedule[0]);
-
+        /*const class_id = insertedClassesIds[0];
 
         const classSchedule = schedule.map((schedule_item: ScheduleItem) => {
           return {
@@ -227,13 +209,12 @@ export default class ClassesController {
         
         await trx('class_schedule')
           .where('id', classSchedule)
-          .update(classSchedule);
+          .update(classSchedule); */
 
         trx.commit();
 
         return response.status(201).send();
       } catch(err) {
-        console.log(err);
         trx.rollback();
         response.status(400).send({ error: 'Error while updating user informations'});
       }
