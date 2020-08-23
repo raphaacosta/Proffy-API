@@ -8,7 +8,8 @@
     "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
     "knex:rollback": "knex --knexfile knexfile.ts migrate:rollback",
-    "build": "tsc"
+    "build": "tsc",
+    "build:babel": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
