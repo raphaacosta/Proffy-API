@@ -31,6 +31,7 @@ interface Token {
 export default class ClassesController {
   async index(request: Request, response: Response) {
     const filters = request.query;
+    const { page = 1 } = request.query;
 
     const subject = filters.subject as string;
     const week_day = filters.week_day as string;
@@ -44,6 +45,10 @@ export default class ClassesController {
 
     const timeInMinutes = convertHourToMinute(time);
 
+    const [count] = await db('users')
+      .where('access_type', '=', 'proffy')
+      .count();
+
     const classes = await db('classes')
       .whereExists(function() {
         this.select('class_schedule.*')
@@ -56,8 +61,12 @@ export default class ClassesController {
       .where('classes.subject', '=', subject)
       .join('users', 'classes.user_id', '=', 'users.id')
       .join('class_schedule', 'classes.id', '=', 'class_schedule.class_id')
+      .limit(5)
+      .offset((Number(page) - 1) * 5)
       .select(['classes.*', 'users.*', 'class_schedule.*']);
 
+    response.header('X-Total-Count', count['count']);
+    
     return response.json(classes);
   }
   
@@ -81,7 +90,7 @@ export default class ClassesController {
         .first()
         .returning('is_revoked');
 
-      console.log(token.is_revoked+'\n')
+      // console.log(token.is_revoked+'\n')
       if(token.is_revoked) {
         return response.status(400).json({ error: 'You session has expired. Login again' });
       }
@@ -129,7 +138,7 @@ export default class ClassesController {
       return response.status(201).send();
     } catch(err) {
       await trx.rollback();
-      console.log(err);
+      // console.log(err);
       
       return response.status(400).json({
         error: 'Unexpected error while creating new class'
@@ -197,20 +206,22 @@ export default class ClassesController {
             cost,
           }).returning('id');
         
-        /*const class_id = insertedClassesIds[0];
+        // const class_id = insertedClassesIds[0];
 
-        const classSchedule = schedule.map((schedule_item: ScheduleItem) => {
-          return {
-            week_day: schedule_item.week_day,
-            from: convertHourToMinute(schedule_item.from),
-            to: convertHourToMinute(schedule_item.to),
-          };
+        // const classSchedule = schedule.map((schedule_item: ScheduleItem) => {
+        //   return {
+        //     week_day: schedule_item.week_day,
+        //     from: convertHourToMinute(schedule_item.from),
+        //     to: convertHourToMinute(schedule_item.to),
+        //   };
           
-        });
+        // });
         
-        await trx('class_schedule')
-          .where('id', classSchedule)
-          .update(classSchedule); */
+        // console.log(classSchedule['week_day']);
+
+        // await trx('class_schedule')
+        //   .where('id', classSchedule)
+        //   .update(classSchedule);
 
         trx.commit();
 
