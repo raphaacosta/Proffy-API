@@ -1,44 +1,30 @@
-import * as nodemailer from "nodemailer";
-import config from './configs';
+import * as nodemailer from 'nodemailer';
 
-class Mail {
-
-  constructor(
-    public to?: string,
-    public subject?: string,
-    public message?: string) { }
-
-
-  sendMail() {
-
-    let mailOptions = {
-      from: "rafa.costa0@hotmail.com",
-      to: this.to,
-      subject: this.subject,
-      html: this.message
-    };
-
-    const transporter = nodemailer.createTransport({
-      host: config.host,
-      port: config.port,
-      secure: false,
-      auth: {
-        user: config.user,
-        pass: config.password
-      },
-      tls: { rejectUnauthorized: false }
-    });
-
-    console.log(mailOptions);
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        return error;
-      } else {
-        return console.log("E-mail enviado com sucesso!");
-      }
-    });
-  }
+export default function mailConfigs (
+    user_email: string, 
+    user_first_name: string, 
+    user_last_name: string
+  ) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'web.apptest@outlook.com',
+      pass: 'monkeysAreFunny0205'
+    }
+  });
+  
+  const mailOptions = {
+    from: 'web.apptest@outlook.com',
+    to: 'rafa.costa0@hotmail.com',
+    subject: 'Sending e-mail using nodejs and nodemailer',
+    text: 'Wow it worked!!!'
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info) {
+    if(error) {
+      console.log(error);
+    } else {
+      console.log('Email sent:' + info.response);
+    }
+  });
 }
-
-export default new Mail;
