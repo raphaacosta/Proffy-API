@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import db from '../database/connection';
 import authConfig from '../config/auth.json';
-import mailConfigs from '../config/mail';
+import { sendGridMail } from '../config/mail';
 
 interface IUser {
   id: string;
@@ -92,19 +92,7 @@ class AuthController {
         type: 'recover'
       }).returning('token');
 
-      const mailData = {
-        to: {
-          name: user.first_name + ' ' + user.last_name,
-          email: user.email,
-        },
-        subject: 'Proffy recuperação de senha.',
-        templateData: {
-          variables: {
-            name: user.first_name + ' ' + user.last_name,
-            link: `${process.env.APP_WEB_URL}/reset_password`,
-          },
-        },
-      };
+      sendGridMail(email);
 
       return response.send('ok');
       

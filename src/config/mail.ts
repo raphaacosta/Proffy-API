@@ -1,30 +1,24 @@
-import * as nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 
-export default function mailConfigs (
-    user_email: string, 
-    user_first_name: string, 
-    user_last_name: string
-  ) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'web.apptest@outlook.com',
-      pass: 'monkeysAreFunny0205'
-    }
-  });
+export function sendGridMail(email: string){
+  // using Twilio SendGrid's v3 Node.js Library
+  // https://github.com/sendgrid/sendgrid-nodejs
+  sgMail.setApiKey(String(process.env.SENDGRID_API_KEY));
   
-  const mailOptions = {
+  const msg = {
+    to: email,
     from: 'web.apptest@outlook.com',
-    to: 'rafa.costa0@hotmail.com',
-    subject: 'Sending e-mail using nodejs and nodemailer',
-    text: 'Wow it worked!!!'
+    subject: 'Recuperação de senha',
+    html: '<h1>Opa, parece que você esqueceu sua senha!</h1>'
+    +'<h2>Sem problema</h2><br/>'+
+    '<p>Clicando no linke você será redirecionado para a página de recperação de senha -> </p>'+
+    '<a href="https://vigilant-shirley-175a33.netlify.app//reset-password">'+
+    'Resete sua senha</a>',
   };
-  
-  transporter.sendMail(mailOptions, function(error, info) {
-    if(error) {
-      console.log(error);
-    } else {
-      console.log('Email sent:' + info.response);
-    }
+  sgMail.send(msg).then(() => {
+    console.log('Message sent')
+  }).catch((error) => {
+      console.log(error.response.body)
+      // console.log(error.response.body.errors[0].message)
   });
 }
