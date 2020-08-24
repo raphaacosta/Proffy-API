@@ -16,7 +16,7 @@ export function sendGridMail(email: string){
     'Resete sua senha</a>',
   };
   sgMail.send(msg).then(() => {
-    console.log('Message sent')
+    
   }).catch((error) => {
       console.log(error.response.body)
       // console.log(error.response.body.errors[0].message)
