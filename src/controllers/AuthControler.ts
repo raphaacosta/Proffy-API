@@ -4,12 +4,14 @@ import jwt from 'jsonwebtoken';
 
 import db from '../database/connection';
 import authConfig from '../config/auth.json';
-import Mail from '../config/mail';
+import { sendGridMail } from '../config/mail';
 
 interface IUser {
   id: string;
   email: string;
   password: string;
+  first_name: string;
+  last_name: string;
 }
 
 interface IToken {
@@ -84,18 +86,15 @@ class AuthController {
         expiresIn: '1h',
       });
 
-      const token = await db('token').insert({
+      await db('token').insert({
         user_id: user.id,
         token: generatedToken,
         type: 'recover'
       }).returning('token');
 
-      Mail.to = user.email;
-      Mail.subject = 'Recuperação de senha';
-      Mail.message = `Use esse token para recuperar sua senha ${token}`;
-      let result = Mail.sendMail();
+      sendGridMail(email);
 
-      return response.json({ 'result': result });
+      return response.send('ok');
       
 
     } catch(err) {
